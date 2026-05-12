@@ -1,0 +1,48 @@
+name: Gerar APK TR Martins
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - principal
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Instalar dependências
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip python3-setuptools python3-wheel git zip unzip openjdk-17-jdk
+          pip3 install --upgrade pip
+          pip3 install buildozer cython
+
+      - name: Criar buildozer.spec
+        run: |
+          buildozer init
+          sed -i 's/title = .*/title = TR Martins Jarvis/' buildozer.spec
+          sed -i 's/package.name = .*/package.name = trmartinsjarvis/' buildozer.spec
+          sed -i 's/package.domain = .*/package.domain = org.trmartins/' buildozer.spec
+          sed -i 's/source.include_exts = .*/source.include_exts = py,png,jpg,kv,atlas,json,csv,txt,pdf/' buildozer.spec
+          sed -i 's/requirements = .*/requirements = python3,kivy/' buildozer.spec
+
+      - name: Gerar APK
+        run: |
+          buildozer -v android debug
+
+      - name: Salvar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: APK-TR-Martins
+          path: bin/*.apk
