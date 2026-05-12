@@ -1,4 +1,4 @@
-name: Build APK
+name: Criar APK
 
 on:
   workflow_dispatch:
@@ -8,28 +8,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout project
+      - name: Projeto Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: Configurar Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install dependencies
+      - name: Instalar dependências
         run: |
           sudo apt update
-          sudo apt install -y python3-pip zip unzip openjdk-17-jdk
+          sudo apt install -y python3-pip zip unzip
           pip3 install --upgrade pip
           pip3 install buildozer cython
 
-      - name: Build APK
+      - name: Criar APK
         run: |
           buildozer init
           buildozer android debug
 
-      - name: Upload APK
+      - name: Carregar APK
         uses: actions/upload-artifact@v4
         with:
           name: TR-Martins-APK
