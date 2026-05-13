@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Projeto Checkout
+      - name: Baixar código
         uses: actions/checkout@v4
 
-      - name: Configurar Java
+      - name: Instalar Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -20,18 +20,16 @@ jobs:
       - name: Instalar dependências
         run: |
           sudo apt update
-          sudo apt install -y python3-pip zip unzip
-          pip3 install --upgrade pip
-          pip3 install buildozer cython
+          sudo apt install -y python3-pip zip unzip openjdk-17-jdk
+          pip install --upgrade pip
+          pip install buildozer cython
 
-      - name: Criar APK
+      - name: Gerar APK
         run: |
-          buildozer init
-          yes | sdkmanager --licenses
           buildozer android debug
 
-      - name: Carregar APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: TR-Martins-APK
+          name: apk
           path: bin/*.apk
