@@ -8,23 +8,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Baixar código
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Instalar Java
+      - name: Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Instalar dependências
+      - name: Install
         run: |
           sudo apt update
           sudo apt install -y python3-pip zip unzip openjdk-17-jdk
           pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Gerar APK
+      - name: Build APK
         run: |
           buildozer android debug
 
