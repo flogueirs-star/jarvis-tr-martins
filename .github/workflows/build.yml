@@ -27,6 +27,7 @@ jobs:
       - name: Criar APK
         run: |
           buildozer init
+          yes | sdkmanager --licenses
           buildozer android debug
 
       - name: Carregar APK
